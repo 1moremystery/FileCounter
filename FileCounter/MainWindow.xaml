@@ -7,6 +7,14 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-
+        <TreeView>
+            <TreeViewItem Header="Test1">
+                <TreeViewItem Header="Test1a">
+                    <TreeViewItem Header="1aa"/>
+                </TreeViewItem>
+                <TreeViewItem Header="Test1b"/>
+            </TreeViewItem>
+            <TreeViewItem Header="Test2"></TreeViewItem>
+        </TreeView>
     </Grid>
 </Window>
