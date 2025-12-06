@@ -8,13 +8,12 @@ using System.Windows.Controls;
 
 namespace FileCounter
 {
-    public static class Loading
+    public static class SaveLoad
     {
         public static void LoadFolder(string path, TreeView tree)
         {
             tree.Items.Clear();
-            //List<CustomFolder> folders = new List<CustomFolder>();
-            foreach(string fPath in Directory.GetDirectories(path))
+            foreach (string fPath in Directory.GetDirectories(path))
             {
                 CustomFolder customFolder = new(fPath);
                 TreeViewItem tvi = new();
@@ -23,12 +22,11 @@ namespace FileCounter
                 AddChildrenToTree(customFolder, tvi);
                 tree.Items.Add(tvi);
             }
-
         }
 
         private static void AddChildrenToTree(CustomFolder customFolder, TreeViewItem tvi)
         {
-            foreach(CustomFolder item in customFolder.Children)
+            foreach (CustomFolder item in customFolder.Children)
             {
                 TreeViewItem treeview = new();
                 treeview.Header = item.Path;

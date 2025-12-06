@@ -27,7 +27,7 @@ namespace FileCounter
             OpenFolderDialog dialog = new();
             if (dialog.ShowDialog().GetValueOrDefault())
             {
-                Loading.LoadFolder(dialog.FolderName, FolderTree);
+                SaveLoad.LoadFolder(dialog.FolderName, FolderTree);
             }
         }
     }
