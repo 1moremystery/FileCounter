@@ -17,18 +17,25 @@ namespace FileCounter
     /// </summary>
     public partial class MainWindow : Window
     {
+        List<CustomFolder> customFolders = new();
+
         public MainWindow()
         {
             InitializeComponent();
         }
-
+        
         private void LoadFolder_Click(object sender, RoutedEventArgs e)
         {
             OpenFolderDialog dialog = new();
             if (dialog.ShowDialog().GetValueOrDefault())
             {
-                SaveLoad.LoadFolder(dialog.FolderName, FolderTree);
+                customFolders = SaveLoad.LoadFolder(dialog.FolderName, FolderTree);
             }
+        }
+
+        private void PrintOutput_Click(object sender, RoutedEventArgs e)
+        {
+            SaveLoad.DoOutput(customFolders);
         }
     }
 }
