@@ -19,8 +19,12 @@ namespace FileCounter
                 CustomFolder customFolder = new(fPath);
                 result.Add(customFolder);
                 TreeViewItem tvi = new();
-                tvi.Header = customFolder.Path;
                 tvi.DataContext = customFolder;
+
+                CheckBox box = new();
+                box.Content = customFolder.Path;
+                tvi.Header = box;
+                
                 AddChildrenToTree(customFolder, tvi);
                 tree.Items.Add(tvi);
             }
@@ -32,8 +36,11 @@ namespace FileCounter
             foreach (CustomFolder item in customFolder.Children)
             {
                 TreeViewItem treeview = new();
-                treeview.Header = item.Path;
                 treeview.DataContext = item;
+                CheckBox box = new();
+                box.Content = item.Path;
+
+                treeview.Header = box;
                 AddChildrenToTree(item, treeview);
                 tvi.Items.Add(treeview);
             }
