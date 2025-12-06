@@ -1,5 +1,5 @@
 ﻿# Todo
-- [ ] Get folder structure
+- [x] Get folder structure
 - [ ] Custom naming
 - [ ] Do output
 	- [ ] Raw output

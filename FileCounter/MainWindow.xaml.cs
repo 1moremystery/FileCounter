@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Microsoft.Win32;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,6 +20,15 @@ namespace FileCounter
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void LoadFolder_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFolderDialog dialog = new();
+            if (dialog.ShowDialog().GetValueOrDefault())
+            {
+                Loading.LoadFolder(dialog.FolderName, FolderTree);
+            }
         }
     }
 }

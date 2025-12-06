@@ -5,16 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FileCounter"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="300">
     <Grid>
-        <TreeView>
-            <TreeViewItem Header="Test1">
-                <TreeViewItem Header="Test1a">
-                    <TreeViewItem Header="1aa"/>
-                </TreeViewItem>
-                <TreeViewItem Header="Test1b"/>
-            </TreeViewItem>
-            <TreeViewItem Header="Test2"></TreeViewItem>
-        </TreeView>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20px"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Menu>
+            <MenuItem Header="File">
+                <MenuItem Header="Load Folder" Click="LoadFolder_Click"/>
+            </MenuItem>
+        </Menu>
+        <TreeView Grid.Row="1" x:Name="FolderTree"/>
+
+
     </Grid>
 </Window>
