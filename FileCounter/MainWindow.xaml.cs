@@ -37,5 +37,19 @@ namespace FileCounter
         {
             SaveLoad.DoOutput(topLevelFolders);
         }
+
+        private void SaveStructure_Click(object sender, RoutedEventArgs e)
+        {
+            if(topLevelFolders.Count == 0)
+            {
+                MessageBox.Show("Add some folders first");
+                return;
+            }
+            SaveFileDialog dialog = new() { ValidateNames = true, Filter = "File Structure File (*.fsf)|*.fsf" };
+            if(dialog.ShowDialog().GetValueOrDefault())
+            {
+                SaveLoad.SaveFoldersToFile(topLevelFolders, dialog.FileName);
+            }
+        }
     }
 }

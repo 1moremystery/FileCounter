@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Xml;
 
 namespace FileCounter
 {
@@ -129,6 +130,34 @@ namespace FileCounter
                     writer.WriteLine($"{item.Item1} {item.Item2}");
                 }
             }
+        }
+
+
+        public static void SaveFoldersToFile(IEnumerable<CustomFolder> folders, string path)
+        {
+            using (XmlWriter output = XmlWriter.Create(path, new() { Indent = true, ConformanceLevel = ConformanceLevel.Auto }))
+            {
+                output.WriteStartDocument();
+                output.WriteStartElement("FolderStructure");
+                foreach (CustomFolder f in folders)
+                {
+                    WriteFolder(f, output);
+                }
+                output.WriteEndElement();
+            }
+        }
+
+        private static void WriteFolder(CustomFolder folder, XmlWriter writer)
+        {
+            writer.WriteStartElement("folder");
+            writer.WriteAttributeString("doCount", folder.DoCount.ToString());
+            writer.WriteAttributeString("path", folder.ToString());
+            //writer.WriteValue(folder.DoCount);
+            foreach(CustomFolder child in folder.Children)
+            {
+                WriteFolder(child, writer);
+            }
+            writer.WriteEndElement();
         }
     }
 }

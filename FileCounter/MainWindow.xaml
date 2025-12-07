@@ -19,7 +19,7 @@
                 <Separator/>
                 <MenuItem Header="Recent Files" IsEnabled="False"/>
                 <Separator/>
-                <MenuItem Header="Save Structure..."/>
+                <MenuItem Header="Save Structure..." Click="SaveStructure_Click"/>
                 <MenuItem Header="Load Structure..."/>
             </MenuItem>
         </Menu>
