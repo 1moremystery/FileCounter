@@ -4,5 +4,8 @@
 - [x] Do output
 	- [x] Raw output
 	- [x] Output With names
-- [ ] Save structure out
+- [x] Save structure out
 - [ ] Load structure in
+- [ ] Recent
+	- [ ] Open to most recent
+	- [ ] Load recent folders
