@@ -17,7 +17,7 @@ namespace FileCounter
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<CustomFolder> customFolders = new();
+        List<CustomFolder> topLevelFolders = new();
 
         public MainWindow()
         {
@@ -29,13 +29,13 @@ namespace FileCounter
             OpenFolderDialog dialog = new();
             if (dialog.ShowDialog().GetValueOrDefault())
             {
-                customFolders = SaveLoad.LoadFolder(dialog.FolderName, FolderTree);
+                topLevelFolders = SaveLoad.LoadFolder(dialog.FolderName, FolderTree);
             }
         }
 
         private void PrintOutput_Click(object sender, RoutedEventArgs e)
         {
-            SaveLoad.DoOutput(customFolders);
+            SaveLoad.DoOutput(topLevelFolders);
         }
     }
 }
