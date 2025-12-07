@@ -24,6 +24,11 @@ namespace FileCounter
             InitializeComponent();
         }
         
+        /// <summary>
+        /// Handles when load folder button is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LoadFolder_Click(object sender, RoutedEventArgs e)
         {
             OpenFolderDialog dialog = new();
@@ -33,11 +38,21 @@ namespace FileCounter
             }
         }
 
+        /// <summary>
+        /// Handles when print output is pressed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PrintOutput_Click(object sender, RoutedEventArgs e)
         {
             SaveLoad.DoOutput(topLevelFolders);
         }
-
+        
+        /// <summary>
+        /// Handles when save button is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SaveStructure_Click(object sender, RoutedEventArgs e)
         {
             if(topLevelFolders.Count == 0)
@@ -48,7 +63,14 @@ namespace FileCounter
             SaveFileDialog dialog = new() { ValidateNames = true, Filter = "File Structure File (*.fsf)|*.fsf" };
             if(dialog.ShowDialog().GetValueOrDefault())
             {
-                SaveLoad.SaveFoldersToFile(topLevelFolders, dialog.FileName);
+                try
+                {
+                    SaveLoad.SaveFoldersToFile(topLevelFolders, dialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Something went wrong:\n{ex.Message}", "Something Went Wrong");
+                }
             }
         }
     }

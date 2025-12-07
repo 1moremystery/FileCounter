@@ -132,7 +132,11 @@ namespace FileCounter
             }
         }
 
-
+        /// <summary>
+        /// Save folders to a file
+        /// </summary>
+        /// <param name="folders">List of topLevel folders</param>
+        /// <param name="path">path to save to</param>
         public static void SaveFoldersToFile(IEnumerable<CustomFolder> folders, string path)
         {
             using (XmlWriter output = XmlWriter.Create(path, new() { Indent = true, ConformanceLevel = ConformanceLevel.Auto }))
@@ -147,6 +151,11 @@ namespace FileCounter
             }
         }
 
+        /// <summary>
+        /// Writes the folder to xmlWriter
+        /// </summary>
+        /// <param name="folder">Folder to write</param>
+        /// <param name="writer">Xml writer</param>
         private static void WriteFolder(CustomFolder folder, XmlWriter writer)
         {
             writer.WriteStartElement("folder");
