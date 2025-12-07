@@ -11,6 +11,12 @@ namespace FileCounter
 {
     public static class SaveLoad
     {
+        /// <summary>
+        /// Loads folders and then adds to the tree
+        /// </summary>
+        /// <param name="path">Path to start on</param>
+        /// <param name="tree">Tree to add onto</param>
+        /// <returns>List of top level folders</returns>
         public static List<CustomFolder> LoadFolder(string path, TreeView tree)
         {
             tree.Items.Clear();
@@ -58,6 +64,10 @@ namespace FileCounter
             }
         }
 
+        /// <summary>
+        /// Saves all folders count to a output txt
+        /// </summary>
+        /// <param name="list">Top level folders list</param>
         public static void DoOutput(List<CustomFolder> list)
         {
             List<Tuple<string, int>> output = new();
@@ -80,6 +90,11 @@ namespace FileCounter
             OutputToFile(output);
         }
 
+        /// <summary>
+        /// Adds all children folder's count to output list
+        /// </summary>
+        /// <param name="outputList">List that goes to output file</param>
+        /// <param name="child">Child folder to check</param>
         private static void OutputOfChild(List<Tuple<string, int>> outputList, CustomFolder child)
         {
             //if count this one, don't count children
@@ -94,6 +109,10 @@ namespace FileCounter
             }
         }
 
+        /// <summary>
+        /// Writes the list to a file
+        /// </summary>
+        /// <param name="list">List of path and count</param>
         private static void OutputToFile(List<Tuple<string, int>> list)
         {
             using (StreamWriter writer = new("output.txt"))
