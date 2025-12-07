@@ -1,11 +1,8 @@
 ﻿# Todo
-- [x] Get folder structure
 - [ ] Custom naming
-- [x] Do output
-	- [x] Raw output
-	- [x] Output With names
-- [x] Save structure out
-- [x] Load structure in
-- [ ] Recent
-	- [ ] Open to most recent
-	- [ ] Load recent folders
+- [ ] Add check that folder still exists
+- [ ] Open outputs
+	- [ ] Open raw
+	- [ ] Open named
+- [ ] Custom sorting
+- [ ] Add more folders into thingy (ie when not exists)
