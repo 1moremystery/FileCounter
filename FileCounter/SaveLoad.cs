@@ -169,9 +169,9 @@ namespace FileCounter
             writer.WriteEndElement();
         }
 
-        public static void SetupTree(IEnumerable<CustomFolder> folders,TreeView tree)
+        public static void SetupTree(IEnumerable<CustomFolder> folders, TreeView tree)
         {
-            foreach(CustomFolder customFolder in folders)
+            foreach (CustomFolder customFolder in folders)
             {
                 TreeViewItem tvi = new();
                 tvi.DataContext = customFolder;
@@ -205,8 +205,11 @@ namespace FileCounter
                         {
                             string? count = reader.GetAttribute("doCount");
                             string? fpath = reader.GetAttribute("path");
+                            string? sOrder = reader.GetAttribute("order");
+                            int order = 0;
                             bool doCount = false;
                             if (count != null) doCount = bool.Parse(count);
+                            if (sOrder != null) order = int.Parse(sOrder);
                             if (fpath == null) throw new NullReferenceException("Malformed File Structure File, (missing path attribute)");
                             List<CustomFolder> children;
                             if (!reader.IsEmptyElement)
@@ -215,10 +218,7 @@ namespace FileCounter
                             }
                             else children = new();
 
-                            folders.Add(new CustomFolder(fpath, children, doCount));
-                            //either setup folder obj
-                            //or some string bs???
-                            //how get children
+                            folders.Add(new CustomFolder(fpath, children, doCount, order));
                         }
                     }
                 }
@@ -234,8 +234,11 @@ namespace FileCounter
             {
                 string? count = reader.GetAttribute("doCount");
                 string? fpath = reader.GetAttribute("path");
+                string? sOrder = reader.GetAttribute("order");
+                int order = 0;
                 bool doCount = false;
                 if (count != null) doCount = bool.Parse(count);
+                if (sOrder != null) order = int.Parse(sOrder);
                 if (fpath == null) throw new NullReferenceException("Malformed File Structure File, (missing path attribute)");
                 List<CustomFolder> child;
                 if (!reader.IsEmptyElement)
@@ -244,7 +247,7 @@ namespace FileCounter
                 }
                 else child = new();
 
-                children.Add(new CustomFolder(fpath, child, doCount));
+                children.Add(new CustomFolder(fpath, child, doCount, order));
             }
             return children;
         }

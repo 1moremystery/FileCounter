@@ -83,6 +83,7 @@ namespace FileCounter
             if (dialog.ShowDialog().GetValueOrDefault())
             {
                 topLevelFolders = SaveLoad.LoadFolder(dialog.FolderName, FolderTree);
+                NumberTopFolders();
             }
         }
 
@@ -130,10 +131,19 @@ namespace FileCounter
             if (dialog.ShowDialog().GetValueOrDefault())
             {
                 topLevelFolders = SaveLoad.LoadFromFile(dialog.FileName);
+                topLevelFolders.Sort();
                 FolderTree.Items.Clear();
                 SaveLoad.SetupTree(topLevelFolders,FolderTree);
                 RecentlyUsed.AddToRecent(recentFiles,dialog.FileName);
                 RecentToMenuItem(recentFiles);
+            }
+        }
+
+        private void NumberTopFolders()
+        {
+            for (int i = 0; i < topLevelFolders.Count; i++)
+            {
+                topLevelFolders[i].Order = i;
             }
         }
     }

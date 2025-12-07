@@ -8,10 +8,12 @@ using System.Windows.Input;
 
 namespace FileCounter
 {
-    public class CustomFolder
+    public class CustomFolder : IComparable<CustomFolder>
     {
         public string Path { get; set; }
         public List<CustomFolder> Children = new();
+        public int Order { get; set; }
+
         public int Count
         {
             get
@@ -31,13 +33,28 @@ namespace FileCounter
             Path = path;
             DoCount = doCount;
             SetupChildren();
+            NumberChildren();
         }
 
-        public CustomFolder(string path, List<CustomFolder> children, bool doCount)
+        public CustomFolder(string path, List<CustomFolder> children, bool doCount, int order)
         {
             Path = path;
             Children = children;
             DoCount = doCount;
+            Order = order;
+            Children.Sort();
+        }
+
+        /// <summary>
+        /// Sets each child to what number in the order it is
+        /// </summary>
+        void NumberChildren()
+        {
+            for(int i = 0; i < Children.Count; i++)
+            {
+                Children[i].Order = i;
+                Children[i].NumberChildren();
+            }
         }
 
         void SetupChildren()
@@ -51,6 +68,12 @@ namespace FileCounter
         public override string ToString()
         {
             return Path;
+        }
+
+        public int CompareTo(CustomFolder? other)
+        {
+            if (other == null) return 1;
+            else return Order.CompareTo(other.Order);
         }
     }
 }
