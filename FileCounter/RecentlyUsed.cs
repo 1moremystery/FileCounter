@@ -15,8 +15,8 @@ namespace FileCounter
         /// <summary>
         /// Gets recent stuff
         /// </summary>
-        /// <param name="recentFiles"></param>
-        /// <returns></returns>
+        /// <param name="recentFiles">List of all recently opened files</param>
+        /// <returns>Most recently opened file</returns>
         public static string GetRecents(out List<string> recentFiles)
         {
             recentFiles = new();
@@ -32,8 +32,8 @@ namespace FileCounter
                     }
                 }
             }
-
-            return recentFiles[0];
+            if (recentFiles.Count == 0) return "";
+            else return recentFiles[0];
         }
 
         public static void WriteRecent(IEnumerable<string> recentFiles)
@@ -59,17 +59,11 @@ namespace FileCounter
             {
                 recentFiles.Insert(0,nPath);
             }
+            else
+            {
+                recentFiles.Add(nPath);
+            }
             WriteRecent(recentFiles);
         }
-
-
-        ////public static void RecentToMenuItem(List<string>recentFiles,MenuItem top)
-        ////{
-        ////    top.Items.Clear();
-        ////    foreach (string file in recentFiles)
-        ////    {
-
-        ////    }
-        ////}
     }
 }

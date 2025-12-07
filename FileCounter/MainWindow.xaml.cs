@@ -18,10 +18,58 @@ namespace FileCounter
     public partial class MainWindow : Window
     {
         List<CustomFolder> topLevelFolders = new();
+        List<string> recentFiles;
 
         public MainWindow()
         {
             InitializeComponent();
+            string mostRecent = RecentlyUsed.GetRecents(out  recentFiles);
+            if (!string.IsNullOrEmpty(mostRecent))
+            {
+                topLevelFolders = SaveLoad.LoadFromFile(mostRecent);
+                SaveLoad.SetupTree(topLevelFolders, FolderTree);
+                RecentToMenuItem(recentFiles);
+            }
+        }
+
+        public void RecentToMenuItem(List<string> recentFiles)
+        {
+            RecentFilesMenuItem.Items.Clear();
+            if(recentFiles.Count > 0 )
+            {
+                RecentFilesMenuItem.IsEnabled = true;
+                MenuItem remove = new();
+                remove.Header = "Remove Recents";
+                remove.Click += RemoveRecentClick;
+                RecentFilesMenuItem.Items.Add(remove);
+            }
+            foreach (string file in recentFiles)
+            {
+                MenuItem menuItem = new MenuItem();
+                menuItem.Header = file;
+                menuItem.Click += RecentFile_Click;
+                RecentFilesMenuItem.Items.Add(menuItem);
+            }
+        }
+
+        private void RecentFile_Click(object sender, RoutedEventArgs e)
+        {
+            if(sender is MenuItem menuItem && menuItem.Header is string s)
+            { 
+                topLevelFolders = SaveLoad.LoadFromFile(s);
+                SaveLoad.SetupTree(topLevelFolders, FolderTree);
+                RecentlyUsed.AddToRecent(recentFiles,s);
+                RecentToMenuItem(recentFiles);
+            }
+        }
+
+        private void RemoveRecentClick(object sender, RoutedEventArgs e)
+        {
+            recentFiles.Clear();
+            RecentFilesMenuItem.Items.Clear();
+            RecentFilesMenuItem.IsEnabled = false;
+            RecentlyUsed.WriteRecent(recentFiles);
+            RecentToMenuItem(recentFiles);
         }
 
         /// <summary>
@@ -66,6 +114,8 @@ namespace FileCounter
                 try
                 {
                     SaveLoad.SaveFoldersToFile(topLevelFolders, dialog.FileName);
+                    RecentlyUsed.AddToRecent(recentFiles, dialog.FileName);
+                    RecentToMenuItem(recentFiles);
                 }
                 catch (Exception ex)
                 {
@@ -82,6 +132,8 @@ namespace FileCounter
                 topLevelFolders = SaveLoad.LoadFromFile(dialog.FileName);
                 FolderTree.Items.Clear();
                 SaveLoad.SetupTree(topLevelFolders,FolderTree);
+                RecentlyUsed.AddToRecent(recentFiles,dialog.FileName);
+                RecentToMenuItem(recentFiles);
             }
         }
     }

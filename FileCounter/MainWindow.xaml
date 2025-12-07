@@ -17,7 +17,7 @@
                 <MenuItem Header="Load Folder..." Click="LoadFolder_Click"/>
                 <MenuItem Header="Print Output..." Click="PrintOutput_Click"/>
                 <Separator/>
-                <MenuItem Header="Recent Files" IsEnabled="False"/>
+                <MenuItem Header="Recent Files" IsEnabled="False" x:Name="RecentFilesMenuItem"/>
                 <Separator/>
                 <MenuItem Header="Save Structure..." Click="SaveStructure_Click"/>
                 <MenuItem Header="Load Structure..." Click="LoadStructure_Click"/>
