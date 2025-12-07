@@ -16,33 +16,26 @@ namespace FileCounter
         {
             get
             {
-                int count = 0;
-                if (CountChildren)
-                {
-                    foreach(CustomFolder child in Children)
-                    {
-                        count += child.Count;
-                    }
-                }
-                else
-                {
-                    count = Directory.GetFiles(Path).Count();
-                }
+                int count = Directory.GetFiles(Path).Count();
+                foreach (var child in Children) count += child.Count;
                 return count;
             }
         }
-        public bool CountChildren { get; set; }
+        /// <summary>
+        /// Whether to count files in this folder 
+        /// </summary>
+        public bool DoCount { get; set; }
 
-        public CustomFolder(string path, bool countChildren = false)
+        public CustomFolder(string path, bool doCount = false)
         {
             Path = path;
+            DoCount = doCount;
             SetupChildren();
-            CountChildren = countChildren;
         }
 
         void SetupChildren()
         {
-            foreach(string s in Directory.GetDirectories(Path))
+            foreach (string s in Directory.GetDirectories(Path))
             {
                 Children.Add(new(s));
             }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace FileCounter
 {
@@ -39,6 +40,9 @@ namespace FileCounter
                 treeview.DataContext = item;
                 CheckBox box = new();
                 box.Content = item.Path;
+                Binding binding = new(nameof(item.DoCount));
+                binding.Mode = BindingMode.TwoWay;
+                BindingOperations.SetBinding(box,CheckBox.IsCheckedProperty, binding);
 
                 treeview.Header = box;
                 AddChildrenToTree(item, treeview);
