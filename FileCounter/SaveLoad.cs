@@ -25,7 +25,13 @@ namespace FileCounter
                 CheckBox box = new();
                 box.Content = customFolder.Path;
                 tvi.Header = box;
-                
+
+                //binding
+                Binding binding = new(nameof(customFolder.DoCount));
+                binding.Mode = BindingMode.TwoWay;
+                BindingOperations.SetBinding(box, CheckBox.IsCheckedProperty, binding);
+
+
                 AddChildrenToTree(customFolder, tvi);
                 tree.Items.Add(tvi);
             }
@@ -40,9 +46,11 @@ namespace FileCounter
                 treeview.DataContext = item;
                 CheckBox box = new();
                 box.Content = item.Path;
+                
+                //binding
                 Binding binding = new(nameof(item.DoCount));
                 binding.Mode = BindingMode.TwoWay;
-                BindingOperations.SetBinding(box,CheckBox.IsCheckedProperty, binding);
+                BindingOperations.SetBinding(box, CheckBox.IsCheckedProperty, binding);
 
                 treeview.Header = box;
                 AddChildrenToTree(item, treeview);
@@ -52,15 +60,41 @@ namespace FileCounter
 
         public static void DoOutput(List<CustomFolder> list)
         {
-            List<Tuple<string,int>> output = new();
+            List<Tuple<string, int>> output = new();
             foreach (CustomFolder item in list)
             {
-                output.Add(new(item.Path, item.Count));
+                //if count this one, don't count children
+                //would duplicate numbers
+                if (item.DoCount)
+                {
+                    output.Add(new(item.Path, item.Count));
+                }
+                else
+                {
+                    foreach (CustomFolder child in item.Children)
+                    {
+                        OutputOfChild(output, child);
+                    }
+                }
             }
             OutputToFile(output);
         }
 
-        private static void OutputToFile(List<Tuple<string,int>> list)
+        private static void OutputOfChild(List<Tuple<string, int>> outputList, CustomFolder child)
+        {
+            //if count this one, don't count children
+            //would duplicate numbers
+            if (child.DoCount)
+            {
+                outputList.Add(new(child.Path, child.Count));
+            }
+            else
+            {
+                foreach (CustomFolder nChild in child.Children) OutputOfChild(outputList, nChild);
+            }
+        }
+
+        private static void OutputToFile(List<Tuple<string, int>> list)
         {
             using (StreamWriter writer = new("output.txt"))
             {
