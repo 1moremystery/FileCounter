@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -53,7 +54,7 @@ namespace FileCounter
                 treeview.DataContext = item;
                 CheckBox box = new();
                 box.Content = item.Path;
-                
+
                 //binding
                 Binding binding = new(nameof(item.DoCount));
                 binding.Mode = BindingMode.TwoWay;
@@ -161,12 +162,91 @@ namespace FileCounter
             writer.WriteStartElement("folder");
             writer.WriteAttributeString("doCount", folder.DoCount.ToString());
             writer.WriteAttributeString("path", folder.ToString());
-            //writer.WriteValue(folder.DoCount);
-            foreach(CustomFolder child in folder.Children)
+            foreach (CustomFolder child in folder.Children)
             {
                 WriteFolder(child, writer);
             }
             writer.WriteEndElement();
+        }
+
+        public static void SetupTree(IEnumerable<CustomFolder> folders,TreeView tree)
+        {
+            foreach(CustomFolder customFolder in folders)
+            {
+                TreeViewItem tvi = new();
+                tvi.DataContext = customFolder;
+
+                CheckBox box = new();
+                box.Content = customFolder.Path;
+                tvi.Header = box;
+
+                //binding
+                Binding binding = new(nameof(customFolder.DoCount));
+                binding.Mode = BindingMode.TwoWay;
+                BindingOperations.SetBinding(box, CheckBox.IsCheckedProperty, binding);
+
+
+                AddChildrenToTree(customFolder, tvi);
+                tree.Items.Add(tvi);
+            }
+        }
+
+
+        public static List<CustomFolder> LoadFromFile(string path)
+        {
+            List<CustomFolder> folders = new List<CustomFolder>();
+            using (XmlReader reader = XmlReader.Create(path))
+            {
+                while (reader.Read())
+                {
+                    if (reader.IsStartElement())
+                    {
+                        if (reader.Name == "folder")
+                        {
+                            string? count = reader.GetAttribute("doCount");
+                            string? fpath = reader.GetAttribute("path");
+                            bool doCount = false;
+                            if (count != null) doCount = bool.Parse(count);
+                            if (fpath == null) throw new NullReferenceException("Malformed File Structure File, (missing path attribute)");
+                            List<CustomFolder> children;
+                            if (!reader.IsEmptyElement)
+                            {
+                                children = LoadChildFolders(reader);
+                            }
+                            else children = new();
+
+                            folders.Add(new CustomFolder(fpath, children, doCount));
+                            //either setup folder obj
+                            //or some string bs???
+                            //how get children
+                        }
+                    }
+                }
+            }
+
+            return folders;
+        }
+
+        private static List<CustomFolder> LoadChildFolders(XmlReader reader)
+        {
+            List<CustomFolder> children = new();
+            while (reader.Read() && reader.IsStartElement())
+            {
+                string? count = reader.GetAttribute("doCount");
+                string? fpath = reader.GetAttribute("path");
+                bool doCount = false;
+                if (count != null) doCount = bool.Parse(count);
+                if (fpath == null) throw new NullReferenceException("Malformed File Structure File, (missing path attribute)");
+                List<CustomFolder> child;
+                if (!reader.IsEmptyElement)
+                {
+                    child = LoadChildFolders(reader);
+                }
+                else child = new();
+
+                children.Add(new CustomFolder(fpath, child, doCount));
+            }
+            return children;
         }
     }
 }

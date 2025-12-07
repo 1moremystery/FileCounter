@@ -33,6 +33,13 @@ namespace FileCounter
             SetupChildren();
         }
 
+        public CustomFolder(string path, List<CustomFolder> children, bool doCount)
+        {
+            Path = path;
+            Children = children;
+            DoCount = doCount;
+        }
+
         void SetupChildren()
         {
             foreach (string s in Directory.GetDirectories(Path))

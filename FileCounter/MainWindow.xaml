@@ -20,7 +20,7 @@
                 <MenuItem Header="Recent Files" IsEnabled="False"/>
                 <Separator/>
                 <MenuItem Header="Save Structure..." Click="SaveStructure_Click"/>
-                <MenuItem Header="Load Structure..."/>
+                <MenuItem Header="Load Structure..." Click="LoadStructure_Click"/>
             </MenuItem>
         </Menu>
         <TreeView Grid.Row="1" x:Name="FolderTree"/>

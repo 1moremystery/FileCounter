@@ -23,7 +23,7 @@ namespace FileCounter
         {
             InitializeComponent();
         }
-        
+
         /// <summary>
         /// Handles when load folder button is clicked
         /// </summary>
@@ -47,7 +47,7 @@ namespace FileCounter
         {
             SaveLoad.DoOutput(topLevelFolders);
         }
-        
+
         /// <summary>
         /// Handles when save button is clicked
         /// </summary>
@@ -55,13 +55,13 @@ namespace FileCounter
         /// <param name="e"></param>
         private void SaveStructure_Click(object sender, RoutedEventArgs e)
         {
-            if(topLevelFolders.Count == 0)
+            if (topLevelFolders.Count == 0)
             {
                 MessageBox.Show("Add some folders first");
                 return;
             }
             SaveFileDialog dialog = new() { ValidateNames = true, Filter = "File Structure File (*.fsf)|*.fsf" };
-            if(dialog.ShowDialog().GetValueOrDefault())
+            if (dialog.ShowDialog().GetValueOrDefault())
             {
                 try
                 {
@@ -71,6 +71,17 @@ namespace FileCounter
                 {
                     MessageBox.Show($"Something went wrong:\n{ex.Message}", "Something Went Wrong");
                 }
+            }
+        }
+
+        private void LoadStructure_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dialog = new() { ValidateNames = true, Filter = "File Structure File (*.fsf)|*.fsf" };
+            if (dialog.ShowDialog().GetValueOrDefault())
+            {
+                topLevelFolders = SaveLoad.LoadFromFile(dialog.FileName);
+                FolderTree.Items.Clear();
+                SaveLoad.SetupTree(topLevelFolders,FolderTree);
             }
         }
     }
