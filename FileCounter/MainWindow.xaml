@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FileCounter"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="300">
+        Title="MainWindow" Height="850" Width="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20px"/>
@@ -14,12 +14,21 @@
         </Grid.RowDefinitions>
         <Menu>
             <MenuItem Header="File">
-                <MenuItem Header="Load Folder" Click="LoadFolder_Click"/>
-                <MenuItem Header="Print Output" Click="PrintOutput_Click"/>
+                <MenuItem Header="Load Folder..." Click="LoadFolder_Click"/>
+                <MenuItem Header="Print Output..." Click="PrintOutput_Click"/>
+                <Separator/>
+                <MenuItem Header="Recent Files" IsEnabled="False"/>
+                <Separator/>
+                <MenuItem Header="Save Structure..."/>
+                <MenuItem Header="Load Structure..."/>
             </MenuItem>
         </Menu>
         <TreeView Grid.Row="1" x:Name="FolderTree"/>
-
+        <DockPanel Grid.Row="2">
+            <Button Click="PrintOutput_Click" DockPanel.Dock="Top">Print Output</Button>
+            <Button DockPanel.Dock="Right">Open Output</Button>
+            <Button DockPanel.Dock="Left">Open Raw Output</Button>
+        </DockPanel>
 
     </Grid>
 </Window>
