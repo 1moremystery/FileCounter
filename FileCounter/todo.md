@@ -8,3 +8,4 @@
 	- [ ] remove from file?
 - [ ] Add individual folders
 	- [ ] Function to go through top folders and see if the path of new folder contains the top path
+- [ ] add way to see what order each folder is

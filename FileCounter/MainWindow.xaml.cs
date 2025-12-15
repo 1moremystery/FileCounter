@@ -32,6 +32,10 @@ namespace FileCounter
             }
         }
 
+        /// <summary>
+        /// Creates and Adds each recent file to the Toolbar menu
+        /// </summary>
+        /// <param name="recentFiles"></param>
         public void RecentToMenuItem(List<string> recentFiles)
         {
             RecentFilesMenuItem.Items.Clear();
@@ -52,6 +56,11 @@ namespace FileCounter
             }
         }
 
+        /// <summary>
+        /// When a recent file is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RecentFile_Click(object sender, RoutedEventArgs e)
         {
             if(sender is MenuItem menuItem && menuItem.Header is string s)
@@ -63,6 +72,11 @@ namespace FileCounter
             }
         }
 
+        /// <summary>
+        /// When the remove recent button is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RemoveRecentClick(object sender, RoutedEventArgs e)
         {
             recentFiles.Clear();
@@ -125,6 +139,9 @@ namespace FileCounter
             }
         }
 
+        /// <summary>
+        /// When the load structure is clicked
+        /// </summary>
         private void LoadStructure_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dialog = new() { ValidateNames = true, Filter = "File Structure File (*.fsf)|*.fsf" };
@@ -139,6 +156,9 @@ namespace FileCounter
             }
         }
 
+        /// <summary>
+        /// Sets the top folder's order
+        /// </summary>
         private void NumberTopFolders()
         {
             for (int i = 0; i < topLevelFolders.Count; i++)
