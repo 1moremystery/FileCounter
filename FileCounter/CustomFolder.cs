@@ -67,7 +67,7 @@ namespace FileCounter
 
         public override string ToString()
         {
-            return Path;
+            return $"{Order} {Path}";
         }
 
         public int CompareTo(CustomFolder? other)
