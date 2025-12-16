@@ -26,8 +26,8 @@
         <TreeView Grid.Row="1" x:Name="FolderTree"/>
         <DockPanel Grid.Row="2">
             <Button Click="PrintOutput_Click" DockPanel.Dock="Top">Print Output</Button>
-            <Button DockPanel.Dock="Right">Open Output</Button>
-            <Button DockPanel.Dock="Left">Open Raw Output</Button>
+            <Button DockPanel.Dock="Right" Click="OpenOutput_Click">Open Output</Button>
+            <Button DockPanel.Dock="Left" Click="OpenRawOutputClick">Open Raw Output</Button>
         </DockPanel>
 
     </Grid>

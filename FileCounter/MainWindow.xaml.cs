@@ -1,4 +1,6 @@
 ﻿using Microsoft.Win32;
+using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -165,6 +167,32 @@ namespace FileCounter
             {
                 topLevelFolders[i].Order = i;
             }
+        }
+
+        /// <summary>
+        /// Opens the raw output txt
+        /// </summary>
+        private void OpenRawOutputClick(object sender, RoutedEventArgs e)
+        {
+            if (!File.Exists("outputRaw.txt"))
+            {
+                SaveLoad.DoOutput(topLevelFolders);
+            }
+            string path = System.IO.Path.GetFullPath("outputRaw.txt");
+            Process.Start("explorer",path);
+        }
+
+        /// <summary>
+        /// Opens the output txt
+        /// </summary>
+        private void OpenOutput_Click(object sender, RoutedEventArgs e)
+        {
+            if (!File.Exists("output.txt"))
+            {
+                SaveLoad.DoOutput(topLevelFolders);
+            }
+            string path = System.IO.Path.GetFullPath("output.txt");
+            Process.Start("explorer", path);
         }
     }
 }
