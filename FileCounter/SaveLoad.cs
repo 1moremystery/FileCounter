@@ -128,7 +128,7 @@ namespace FileCounter
             {
                 foreach (var item in list)
                 {
-                    writer.WriteLine($"{item.Item1} {item.Item2}");
+                    writer.WriteLine($"{item.Item2}");
                 }
             }
         }
