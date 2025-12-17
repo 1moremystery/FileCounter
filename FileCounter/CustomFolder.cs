@@ -38,6 +38,7 @@ namespace FileCounter
 
         public CustomFolder(string path, List<CustomFolder> children, bool doCount, int order)
         {
+            if (!Directory.Exists(path)) throw new FileNotFoundException("This Folder wasn't found!");
             Path = path;
             Children = children;
             DoCount = doCount;

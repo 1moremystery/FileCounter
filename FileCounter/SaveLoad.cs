@@ -5,8 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Xml;
 
 namespace FileCounter
@@ -161,7 +163,7 @@ namespace FileCounter
         {
             writer.WriteStartElement("folder");
             writer.WriteAttributeString("doCount", folder.DoCount.ToString());
-            writer.WriteAttributeString("path", folder.ToString());
+            writer.WriteAttributeString("path", folder.Path);
             foreach (CustomFolder child in folder.Children)
             {
                 WriteFolder(child, writer);
@@ -217,8 +219,15 @@ namespace FileCounter
                                 children = LoadChildFolders(reader);
                             }
                             else children = new();
+                            try
+                            {
+                                folders.Add(new CustomFolder(fpath, children, doCount, order));
+                            }
+                            catch
+                            {
+                                MessageBox.Show($"Failed to load: {fpath}");
+                            }
 
-                            folders.Add(new CustomFolder(fpath, children, doCount, order));
                         }
                     }
                 }
@@ -247,7 +256,14 @@ namespace FileCounter
                 }
                 else child = new();
 
-                children.Add(new CustomFolder(fpath, child, doCount, order));
+                try
+                {
+                    children.Add(new CustomFolder(fpath, child, doCount, order));
+                }
+                catch
+                {
+                    MessageBox.Show($"Failed to load: {fpath}");
+                }
             }
             return children;
         }
