@@ -48,6 +48,11 @@ namespace FileCounter
             return result;
         }
 
+        /// <summary>
+        /// Adds all children of a folder to it's tree item
+        /// </summary>
+        /// <param name="customFolder">Folder to get children of</param>
+        /// <param name="tvi">Tree item to add children too</param>
         private static void AddChildrenToTree(CustomFolder customFolder, TreeViewItem tvi)
         {
             foreach (CustomFolder item in customFolder.Children)
@@ -55,7 +60,7 @@ namespace FileCounter
                 TreeViewItem treeview = new();
                 treeview.DataContext = item;
                 CheckBox box = new();
-                box.Content = item.Path;
+                box.Content = item.ToString();
 
                 //binding
                 Binding binding = new(nameof(item.DoCount));
@@ -171,20 +176,25 @@ namespace FileCounter
             writer.WriteEndElement();
         }
 
+        /// <summary>
+        /// Sets up the tree
+        /// </summary>
+        /// <param name="folders">List of top folders to add</param>
+        /// <param name="tree">TreeView to add to</param>
         public static void SetupTree(IEnumerable<CustomFolder> folders, TreeView tree)
         {
             ContextMenu context = new();
             context.Items.Add(new MenuItem() { Header = "Reset Children Order" });
             context.Items.Add(new MenuItem() { Header = "Move Up" });
             context.Items.Add(new MenuItem() { Header = "Move Down" });
-
+            tree.Items.Clear();
             foreach (CustomFolder customFolder in folders)
             {
                 TreeViewItem tvi = new();
                 tvi.DataContext = customFolder;
 
                 CheckBox box = new();
-                box.Content = customFolder.Path;
+                box.Content = customFolder.ToString();
                 tvi.Header = box;
                 tvi.ContextMenu = context;
                 //binding
