@@ -1,15 +1,15 @@
 ﻿# Todo
 - [ ] Custom naming
-- [ ] Open outputs
-	- [ ] Open raw
-	- [ ] Open named
+- [x] Open outputs
+	- [x] Open raw
+	- [x] Open named
 - [ ] Custom sorting
 	- [ ] context menu
 		- [ ] right click to reset children order
 		- [ ] move up
 		- [ ] move down
-- [ ] Add check that folder still exists
+- [x] Add check that folder still exists
 	- [ ] remove from file?
-- [x] Add individual folders
+- [ ] Add individual folders
 	- [ ] Function to go through top folders and see if the path of new folder contains the top path
-- [ ] add way to see what order each folder is
+- [x] add way to see what order each folder is
