@@ -173,6 +173,11 @@ namespace FileCounter
 
         public static void SetupTree(IEnumerable<CustomFolder> folders, TreeView tree)
         {
+            ContextMenu context = new();
+            context.Items.Add(new MenuItem() { Header = "Reset Children Order" });
+            context.Items.Add(new MenuItem() { Header = "Move Up" });
+            context.Items.Add(new MenuItem() { Header = "Move Down" });
+
             foreach (CustomFolder customFolder in folders)
             {
                 TreeViewItem tvi = new();
@@ -181,7 +186,7 @@ namespace FileCounter
                 CheckBox box = new();
                 box.Content = customFolder.Path;
                 tvi.Header = box;
-
+                tvi.ContextMenu = context;
                 //binding
                 Binding binding = new(nameof(customFolder.DoCount));
                 binding.Mode = BindingMode.TwoWay;
