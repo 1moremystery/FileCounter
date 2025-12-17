@@ -22,6 +22,7 @@
                 <MenuItem Header="Save Structure..." Click="SaveStructure_Click"/>
                 <MenuItem Header="Load Structure..." Click="LoadStructure_Click"/>
             </MenuItem>
+            <MenuItem Header="Reset all Order" Click="ResetAllOrder_Click"/>
         </Menu>
         <TreeView Grid.Row="1" x:Name="FolderTree"/>
         <DockPanel Grid.Row="2">

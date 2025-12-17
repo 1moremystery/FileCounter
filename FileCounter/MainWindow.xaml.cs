@@ -194,5 +194,19 @@ namespace FileCounter
             string path = System.IO.Path.GetFullPath("output.txt");
             Process.Start("explorer", path);
         }
+
+        private void ResetAllOrder_Click(object sender, RoutedEventArgs e)
+        {
+            if(topLevelFolders.Count <= 0)
+            {
+                MessageBox.Show("Add folders");
+                return;
+            }
+            else
+            {
+                topLevelFolders = FolderFunctions.SortFolderAndChildrenByName(topLevelFolders);
+                SaveLoad.SetupTree(topLevelFolders, FolderTree);
+            }
+        }
     }
 }
