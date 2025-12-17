@@ -49,7 +49,7 @@ namespace FileCounter
         /// <summary>
         /// Sets each child to what number in the order it is
         /// </summary>
-        void NumberChildren()
+        public void NumberChildren()
         {
             for(int i = 0; i < Children.Count; i++)
             {

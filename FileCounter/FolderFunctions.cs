@@ -23,8 +23,21 @@ namespace FileCounter
                 folder.Children = SortFolderAndChildrenByName(folder.Children);
                 //index++;
             }
+            ResetOrder(sorted);
             return sorted;
         }
 
+        /// <summary>
+        /// Sets the order of folder to what they are
+        /// </summary>
+        /// <param name="folders">List of folder</param>
+        public static void ResetOrder(List<CustomFolder> folders)
+        {
+            for(int i = 0; i < folders.Count; i++)
+            {
+                folders[i].Order = i;
+                folders[i].NumberChildren();
+            }
+        }
     }
 }
