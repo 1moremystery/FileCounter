@@ -169,6 +169,7 @@ namespace FileCounter
             writer.WriteStartElement("folder");
             writer.WriteAttributeString("doCount", folder.DoCount.ToString());
             writer.WriteAttributeString("path", folder.Path);
+            writer.WriteAttributeString("order", folder.Order.ToString());
             foreach (CustomFolder child in folder.Children)
             {
                 WriteFolder(child, writer);
