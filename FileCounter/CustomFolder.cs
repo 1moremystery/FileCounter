@@ -14,6 +14,8 @@ namespace FileCounter
         public List<CustomFolder> Children = new();
         public int Order { get; set; }
 
+        public CustomFolder? ParentFolder { get; set; }
+
         public int Count
         {
             get
@@ -28,15 +30,15 @@ namespace FileCounter
         /// </summary>
         public bool DoCount { get; set; }
 
-        public CustomFolder(string path, bool doCount = false)
+        public CustomFolder(string path, CustomFolder? parentFolder = null)
         {
             Path = path;
-            DoCount = doCount;
+            ParentFolder = parentFolder;
             SetupChildren();
             NumberChildren();
         }
 
-        public CustomFolder(string path, List<CustomFolder> children, bool doCount, int order)
+        public CustomFolder(string path, List<CustomFolder> children, bool doCount, int order, CustomFolder? parentFolder = null)
         {
             if (!Directory.Exists(path)) throw new FileNotFoundException("This Folder wasn't found!");
             Path = path;
@@ -44,17 +46,18 @@ namespace FileCounter
             DoCount = doCount;
             Order = order;
             Children.Sort();
+            ParentFolder = parentFolder;
         }
 
         /// <summary>
         /// Sets each child to what number in the order it is
         /// </summary>
-        public void NumberChildren()
+        public void NumberChildren(bool recurse = false)
         {
             for(int i = 0; i < Children.Count; i++)
             {
                 Children[i].Order = i;
-                Children[i].NumberChildren();
+                if(recurse) Children[i].NumberChildren(true);
             }
         }
 
@@ -62,7 +65,7 @@ namespace FileCounter
         {
             foreach (string s in Directory.GetDirectories(Path))
             {
-                Children.Add(new(s));
+                Children.Add(new(s,this));
             }
         }
 
