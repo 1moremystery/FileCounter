@@ -185,34 +185,41 @@ namespace FileCounter
         public static void SetupTree(IEnumerable<CustomFolder> folders, TreeView tree)
         {
             ContextMenu context = new();
+            MenuItem moveUp = new MenuItem() { Header = "Move Up" };
+            moveUp.Click += FolderFunctions.MoveUp;
+
             context.Items.Add(new MenuItem() { Header = "Reset Children Order" });
-            context.Items.Add(new MenuItem() { Header = "Move Up" });
+            context.Items.Add(moveUp);
             context.Items.Add(new MenuItem() { Header = "Move Down" });
             tree.Items.Clear();
             foreach (CustomFolder customFolder in folders)
             {
-                TreeViewItem tvi = new();
-                tvi.DataContext = customFolder;
+                TreeViewItem treeItem = new();
+                treeItem.DataContext = customFolder;
 
-                CheckBox box = new();
-                box.Content = customFolder.ToString();
-                tvi.Header = box;
-                tvi.ContextMenu = context;
+                CheckBox checkBox = new();
+                checkBox.Content = customFolder.ToString();
+                treeItem.Header = checkBox;
+                treeItem.ContextMenu = context;
                 //binding
                 Binding binding = new(nameof(customFolder.DoCount));
                 binding.Mode = BindingMode.TwoWay;
-                BindingOperations.SetBinding(box, CheckBox.IsCheckedProperty, binding);
+                BindingOperations.SetBinding(checkBox, CheckBox.IsCheckedProperty, binding);
 
 
-                AddChildrenToTree(customFolder, tvi);
-                tree.Items.Add(tvi);
+                AddChildrenToTree(customFolder, treeItem);
+                tree.Items.Add(treeItem);
             }
         }
 
-
+        /// <summary>
+        /// Load File from file
+        /// </summary>
+        /// <param name="path">Path of file</param>
+        /// <returns>List of folders</returns>
         public static List<CustomFolder> LoadFromFile(string path)
         {
-            List<CustomFolder> folders = new List<CustomFolder>();
+            List<CustomFolder> topLevelFolders = new List<CustomFolder>();
             using (XmlReader reader = XmlReader.Create(path))
             {
                 while (reader.Read())
@@ -229,15 +236,16 @@ namespace FileCounter
                             if (count != null) doCount = bool.Parse(count);
                             if (sOrder != null) order = int.Parse(sOrder);
                             if (fpath == null) throw new NullReferenceException("Malformed File Structure File, (missing path attribute)");
-                            List<CustomFolder> children;
-                            if (!reader.IsEmptyElement)
-                            {
-                                children = LoadChildFolders(reader);
-                            }
-                            else children = new();
+                            
                             try
                             {
-                                folders.Add(new CustomFolder(fpath, children, doCount, order));
+                                List<CustomFolder> children = new();
+                                CustomFolder folda = new CustomFolder(fpath, children, doCount, order);
+                                if (!reader.IsEmptyElement)
+                                {
+                                    children = LoadChildFolders(reader,folda);
+                                }
+                                topLevelFolders.Add(folda);
                             }
                             catch
                             {
@@ -249,12 +257,17 @@ namespace FileCounter
                 }
             }
 
-            return folders;
+            return topLevelFolders;
         }
 
-        private static List<CustomFolder> LoadChildFolders(XmlReader reader)
+        /// <summary>
+        /// Loads the children folders from the xml reader
+        /// </summary>
+        /// <param name="reader">XML reader</param>
+        /// <returns>List of children folders</returns>
+        private static List<CustomFolder> LoadChildFolders(XmlReader reader, CustomFolder parent)
         {
-            List<CustomFolder> children = new();
+            List<CustomFolder> childrenList = new();
             while (reader.Read() && reader.IsStartElement())
             {
                 string? count = reader.GetAttribute("doCount");
@@ -265,23 +278,23 @@ namespace FileCounter
                 if (count != null) doCount = bool.Parse(count);
                 if (sOrder != null) order = int.Parse(sOrder);
                 if (fpath == null) throw new NullReferenceException("Malformed File Structure File, (missing path attribute)");
-                List<CustomFolder> child;
-                if (!reader.IsEmptyElement)
-                {
-                    child = LoadChildFolders(reader);
-                }
-                else child = new();
-
                 try
                 {
-                    children.Add(new CustomFolder(fpath, child, doCount, order));
+                    List<CustomFolder> child = new();
+                    CustomFolder folder = new(fpath, child, doCount, order, parent);
+                    if (!reader.IsEmptyElement)
+                    {
+                        child = LoadChildFolders(reader,folder);
+                    }
+                    childrenList.Add(folder);
+
                 }
                 catch
                 {
                     MessageBox.Show($"Failed to load: {fpath}");
                 }
             }
-            return children;
+            return childrenList;
         }
     }
 }

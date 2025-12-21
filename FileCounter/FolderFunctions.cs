@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace FileCounter
 {
@@ -17,7 +19,7 @@ namespace FileCounter
         {
             List<CustomFolder> sorted = folders.OrderBy(o => o.Path).ToList();
             //int index = 0;
-            foreach(CustomFolder folder in sorted)
+            foreach (CustomFolder folder in sorted)
             {
                 //folder.Order = index;
                 folder.Children = SortFolderAndChildrenByName(folder.Children);
@@ -33,10 +35,20 @@ namespace FileCounter
         /// <param name="folders">List of folder</param>
         public static void ResetOrder(List<CustomFolder> folders)
         {
-            for(int i = 0; i < folders.Count; i++)
+            for (int i = 0; i < folders.Count; i++)
             {
                 folders[i].Order = i;
                 folders[i].NumberChildren();
+            }
+        }
+
+        public static void MoveUp(object sender, RoutedEventArgs args)
+        {
+            if (sender is MenuItem menuItem && menuItem.DataContext is CustomFolder folder && folder.ParentFolder != null)
+            {
+                int index = folder.ParentFolder.Children.IndexOf(folder);
+                folder.ParentFolder.Children.Remove(folder);
+                folder.ParentFolder.Children.Insert(Math.Clamp(index - 1, 0, int.MaxValue), folder);
             }
         }
     }
