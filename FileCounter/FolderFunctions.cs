@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 
 namespace FileCounter
 {
@@ -91,5 +92,28 @@ namespace FileCounter
                 }
             }
         }
+
+        public static void CheckAllChildren(object sender, RoutedEventArgs args)
+        {
+            if (sender is MenuItem menuItem && menuItem.DataContext is CustomFolder folder)
+            {
+                foreach(CustomFolder child in folder.Children)
+                {
+                    child.DoCount = true;
+                }
+            }
+        }
+
+        public static void UncheckAllChildren(object sender, RoutedEventArgs args)
+        {
+            if (sender is MenuItem menuItem && menuItem.DataContext is CustomFolder folder)
+            {
+                foreach (CustomFolder child in folder.Children)
+                {
+                    child.DoCount = false;
+                }
+            }
+        }
+
     }
 }

@@ -8,7 +8,7 @@
 		- [ ] right click to reset children order
 		- [x] move up
 		- [x] move down
-		- [ ] Check/uncheck children
+		- [x] Check/uncheck children
 - [x] Add check that folder still exists
 	- [ ] remove from file?
 - [ ] Add individual folders

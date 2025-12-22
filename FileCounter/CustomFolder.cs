@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ using System.Windows.Input;
 
 namespace FileCounter
 {
-    public class CustomFolder : IComparable<CustomFolder>
+    public class CustomFolder : IComparable<CustomFolder>, INotifyPropertyChanged
     {
         public string Path { get; set; }
         public List<CustomFolder> Children = new();
@@ -21,7 +22,7 @@ namespace FileCounter
         /// <summary>
         /// If this folder is a top level folder this is where the list of all will go
         /// </summary>
-        public List<CustomFolder>? TopLevelFoldersList { get; set;}
+        public List<CustomFolder>? TopLevelFoldersList { get; set; }
 
         public int Count
         {
@@ -32,10 +33,23 @@ namespace FileCounter
                 return count;
             }
         }
+
+        private bool _doCount = false;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         /// <summary>
         /// Whether to count files in this folder 
         /// </summary>
-        public bool DoCount { get; set; }
+        public bool DoCount
+        {
+            get => _doCount;
+            set
+            {
+                _doCount = value;
+                PropertyChanged?.Invoke(this, new(nameof(DoCount)));
+            }
+        }
 
         public CustomFolder(string path, CustomFolder? parentFolder = null)
         {
@@ -61,10 +75,10 @@ namespace FileCounter
         /// </summary>
         public void NumberChildren(bool recurse = false)
         {
-            for(int i = 0; i < Children.Count; i++)
+            for (int i = 0; i < Children.Count; i++)
             {
                 Children[i].Order = i;
-                if(recurse) Children[i].NumberChildren(true);
+                if (recurse) Children[i].NumberChildren(true);
             }
         }
 
@@ -72,7 +86,7 @@ namespace FileCounter
         {
             foreach (string s in Directory.GetDirectories(Path))
             {
-                Children.Add(new(s,this));
+                Children.Add(new(s, this));
             }
         }
 

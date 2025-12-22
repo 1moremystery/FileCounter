@@ -23,9 +23,19 @@ namespace FileCounter
             moveUp.Click += FolderFunctions.MoveUp;
             MenuItem moveDown = new MenuItem() { Header = "Move Down" };
             moveDown.Click += FolderFunctions.MoveDown;
+
+            MenuItem CheckChildren = new() { Header = "Check All Children" };
+            CheckChildren.Click += FolderFunctions.CheckAllChildren;
+            
+            MenuItem UnCheckChildren = new() { Header = "Uncheck All Children" };
+            UnCheckChildren.Click += FolderFunctions.UncheckAllChildren;
+
             contextMenu.Items.Add(new MenuItem() { Header = "Reset Children Order" });
             contextMenu.Items.Add(moveUp);
             contextMenu.Items.Add(moveDown);
+            contextMenu.Items.Add(new Separator());
+            contextMenu.Items.Add(CheckChildren);
+            contextMenu.Items.Add(UnCheckChildren);
         }
         /// <summary>
         /// Loads folders and then adds to the tree
