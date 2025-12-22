@@ -67,5 +67,29 @@ namespace FileCounter
                 }
             }
         }
+
+        public static void MoveDown(object sender, RoutedEventArgs args)
+        {
+            if (sender is MenuItem menuItem && menuItem.DataContext is CustomFolder folder)
+            {
+                if (folder.ParentFolder != null)
+                {
+                    int index = folder.ParentFolder.Children.IndexOf(folder);
+                    index = Math.Clamp(index+1, 0, folder.ParentFolder.Count-1);
+                    folder.ParentFolder.Children.Remove(folder);
+                    folder.ParentFolder.Children.Insert(index, folder);
+                    folder.ParentFolder.NumberChildren();
+                    RedrawTreeEvent?.Invoke(folder, false);
+                }
+                else if (folder.TopLevelFoldersList != null)
+                {
+                    int index = folder.TopLevelFoldersList.IndexOf(folder);
+                    index = Math.Clamp(index+1,0, folder.TopLevelFoldersList.Count-1);
+                    folder.TopLevelFoldersList.Remove(folder);
+                    folder.TopLevelFoldersList.Insert(index, folder);
+                    RedrawTreeEvent?.Invoke(folder, true);
+                }
+            }
+        }
     }
 }

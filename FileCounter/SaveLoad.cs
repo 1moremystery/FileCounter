@@ -15,15 +15,17 @@ namespace FileCounter
 {
     public static class SaveLoad
     {
-        static ContextMenu conextMenu = new();
+        static ContextMenu contextMenu = new();
         static SaveLoad()
         {
             //Context menu
             MenuItem moveUp = new MenuItem() { Header = "Move Up" };
             moveUp.Click += FolderFunctions.MoveUp;
-            conextMenu.Items.Add(new MenuItem() { Header = "Reset Children Order" });
-            conextMenu.Items.Add(moveUp);
-            conextMenu.Items.Add(new MenuItem() { Header = "Move Down" });
+            MenuItem moveDown = new MenuItem() { Header = "Move Down" };
+            moveDown.Click += FolderFunctions.MoveDown;
+            contextMenu.Items.Add(new MenuItem() { Header = "Reset Children Order" });
+            contextMenu.Items.Add(moveUp);
+            contextMenu.Items.Add(moveDown);
         }
         /// <summary>
         /// Loads folders and then adds to the tree
@@ -69,7 +71,7 @@ namespace FileCounter
             {
                 TreeViewItem treeview = new();
                 treeview.DataContext = item;
-                treeview.ContextMenu = conextMenu;
+                treeview.ContextMenu = contextMenu;
                 CheckBox box = new();
                 box.Content = item.ToString();
                 //binding
@@ -206,7 +208,7 @@ namespace FileCounter
                 CheckBox checkBox = new();
                 checkBox.Content = customFolder.ToString();
                 treeItem.Header = checkBox;
-                treeItem.ContextMenu = conextMenu;
+                treeItem.ContextMenu = contextMenu;
                 //binding
                 Binding binding = new(nameof(customFolder.DoCount));
                 binding.Mode = BindingMode.TwoWay;

@@ -7,7 +7,7 @@
 	- [ ] context menu
 		- [ ] right click to reset children order
 		- [x] move up
-		- [ ] move down
+		- [x] move down
 		- [ ] Check/uncheck children
 - [x] Add check that folder still exists
 	- [ ] remove from file?
