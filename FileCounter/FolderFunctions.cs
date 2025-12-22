@@ -10,7 +10,7 @@ namespace FileCounter
 {
     public static class FolderFunctions
     {
-        public static event EventHandler RedrawTree;
+        public static event EventHandler RedrawTreeEvent;
         /// <summary>
         /// Sorts the folders and folder's children by path name
         /// </summary>
@@ -19,12 +19,9 @@ namespace FileCounter
         public static List<CustomFolder> SortFolderAndChildrenByName(List<CustomFolder> folders)
         {
             List<CustomFolder> sorted = folders.OrderBy(o => o.Path).ToList();
-            //int index = 0;
             foreach (CustomFolder folder in sorted)
             {
-                //folder.Order = index;
                 folder.Children = SortFolderAndChildrenByName(folder.Children);
-                //index++;
             }
             ResetOrder(sorted);
             return sorted;
@@ -54,7 +51,7 @@ namespace FileCounter
                 folder.ParentFolder.Children.Remove(folder);
                 folder.ParentFolder.Children.Insert(Math.Clamp(index - 1, 0, int.MaxValue), folder);
                 folder.ParentFolder.NumberChildren();
-                RedrawTree?.Invoke(folder,new());
+                RedrawTreeEvent?.Invoke(folder,new());
             }
         }
     }

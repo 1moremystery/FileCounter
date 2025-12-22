@@ -32,7 +32,7 @@ namespace FileCounter
                 SaveLoad.SetupTree(topLevelFolders, FolderTree);
                 RecentToMenuItem(recentFiles);
             }
-            FolderFunctions.RedrawTree += FolderFunctions_RedrawTree;
+            FolderFunctions.RedrawTreeEvent += FolderFunctions_RedrawTree;
         }
 
         private void FolderFunctions_RedrawTree(object? sender, EventArgs e)
