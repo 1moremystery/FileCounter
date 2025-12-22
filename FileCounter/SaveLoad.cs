@@ -15,6 +15,16 @@ namespace FileCounter
 {
     public static class SaveLoad
     {
+        static ContextMenu conextMenu = new();
+        static SaveLoad()
+        {
+            //Context menu
+            MenuItem moveUp = new MenuItem() { Header = "Move Up" };
+            moveUp.Click += FolderFunctions.MoveUp;
+            conextMenu.Items.Add(new MenuItem() { Header = "Reset Children Order" });
+            conextMenu.Items.Add(moveUp);
+            conextMenu.Items.Add(new MenuItem() { Header = "Move Down" });
+        }
         /// <summary>
         /// Loads folders and then adds to the tree
         /// </summary>
@@ -59,9 +69,9 @@ namespace FileCounter
             {
                 TreeViewItem treeview = new();
                 treeview.DataContext = item;
+                treeview.ContextMenu = conextMenu;
                 CheckBox box = new();
                 box.Content = item.ToString();
-
                 //binding
                 Binding binding = new(nameof(item.DoCount));
                 binding.Mode = BindingMode.TwoWay;
@@ -184,13 +194,9 @@ namespace FileCounter
         /// <param name="tree">TreeView to add to</param>
         public static void SetupTree(IEnumerable<CustomFolder> folders, TreeView tree)
         {
-            ContextMenu context = new();
-            MenuItem moveUp = new MenuItem() { Header = "Move Up" };
-            moveUp.Click += FolderFunctions.MoveUp;
+            
 
-            context.Items.Add(new MenuItem() { Header = "Reset Children Order" });
-            context.Items.Add(moveUp);
-            context.Items.Add(new MenuItem() { Header = "Move Down" });
+            //setup tree
             tree.Items.Clear();
             foreach (CustomFolder customFolder in folders)
             {
@@ -200,7 +206,7 @@ namespace FileCounter
                 CheckBox checkBox = new();
                 checkBox.Content = customFolder.ToString();
                 treeItem.Header = checkBox;
-                treeItem.ContextMenu = context;
+                treeItem.ContextMenu = conextMenu;
                 //binding
                 Binding binding = new(nameof(customFolder.DoCount));
                 binding.Mode = BindingMode.TwoWay;
@@ -236,14 +242,14 @@ namespace FileCounter
                             if (count != null) doCount = bool.Parse(count);
                             if (sOrder != null) order = int.Parse(sOrder);
                             if (fpath == null) throw new NullReferenceException("Malformed File Structure File, (missing path attribute)");
-                            
+
                             try
                             {
-                                List<CustomFolder> children = new();
-                                CustomFolder folda = new CustomFolder(fpath, children, doCount, order);
+                                //toplevel folder so parent is null
+                                CustomFolder folda = new CustomFolder(fpath, new(), doCount, order);
                                 if (!reader.IsEmptyElement)
                                 {
-                                    children = LoadChildFolders(reader,folda);
+                                    folda.Children = LoadChildFolders(reader, folda);
                                 }
                                 topLevelFolders.Add(folda);
                             }
@@ -280,11 +286,10 @@ namespace FileCounter
                 if (fpath == null) throw new NullReferenceException("Malformed File Structure File, (missing path attribute)");
                 try
                 {
-                    List<CustomFolder> child = new();
-                    CustomFolder folder = new(fpath, child, doCount, order, parent);
+                    CustomFolder folder = new(fpath, new(), doCount, order, parent);
                     if (!reader.IsEmptyElement)
                     {
-                        child = LoadChildFolders(reader,folder);
+                        folder.Children = LoadChildFolders(reader, folder);
                     }
                     childrenList.Add(folder);
 
