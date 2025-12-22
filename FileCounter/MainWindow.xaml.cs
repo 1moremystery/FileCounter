@@ -35,8 +35,14 @@ namespace FileCounter
             FolderFunctions.RedrawTreeEvent += FolderFunctions_RedrawTree;
         }
 
-        private void FolderFunctions_RedrawTree(object? sender, EventArgs e)
+        /// <summary>
+        /// When a tree redraw is needed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e">if top level folders need to re-numbered</param>
+        private void FolderFunctions_RedrawTree(object? sender, bool e)
         {
+            if (e) NumberTopFolders();
             SaveLoad.SetupTree(topLevelFolders, FolderTree);
         }
 

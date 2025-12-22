@@ -6,8 +6,9 @@
 - [ ] Custom sorting
 	- [ ] context menu
 		- [ ] right click to reset children order
-		- [ ] move up
+		- [x] move up
 		- [ ] move down
+		- [ ] Check/uncheck children
 - [x] Add check that folder still exists
 	- [ ] remove from file?
 - [ ] Add individual folders

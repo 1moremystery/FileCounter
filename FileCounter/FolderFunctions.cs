@@ -10,7 +10,10 @@ namespace FileCounter
 {
     public static class FolderFunctions
     {
-        public static event EventHandler RedrawTreeEvent;
+        /// <summary>
+        /// A redraw of the tree is needed, bool is whether the top level folders need to be reordered
+        /// </summary>
+        public static event EventHandler<bool> RedrawTreeEvent;
         /// <summary>
         /// Sorts the folders and folder's children by path name
         /// </summary>
@@ -45,13 +48,23 @@ namespace FileCounter
         /// </summary>
         public static void MoveUp(object sender, RoutedEventArgs args)
         {
-            if (sender is MenuItem menuItem && menuItem.DataContext is CustomFolder folder && folder.ParentFolder != null)
+            if (sender is MenuItem menuItem && menuItem.DataContext is CustomFolder folder)
             {
-                int index = folder.ParentFolder.Children.IndexOf(folder);
-                folder.ParentFolder.Children.Remove(folder);
-                folder.ParentFolder.Children.Insert(Math.Clamp(index - 1, 0, int.MaxValue), folder);
-                folder.ParentFolder.NumberChildren();
-                RedrawTreeEvent?.Invoke(folder,new());
+                if(folder.ParentFolder != null)
+                {
+                    int index = folder.ParentFolder.Children.IndexOf(folder);
+                    folder.ParentFolder.Children.Remove(folder);
+                    folder.ParentFolder.Children.Insert(Math.Clamp(index - 1, 0, int.MaxValue), folder);
+                    folder.ParentFolder.NumberChildren();
+                    RedrawTreeEvent?.Invoke(folder, false);
+                }
+                else if(folder.TopLevelFoldersList != null)
+                {
+                    int index = folder.TopLevelFoldersList.IndexOf(folder);
+                    folder.TopLevelFoldersList.Remove(folder);
+                    folder.TopLevelFoldersList.Insert(Math.Clamp(index - 1, 0, int.MaxValue), folder);
+                    RedrawTreeEvent?.Invoke(folder, true);
+                }
             }
         }
     }

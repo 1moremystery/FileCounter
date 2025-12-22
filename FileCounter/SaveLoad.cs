@@ -247,6 +247,8 @@ namespace FileCounter
                             {
                                 //toplevel folder so parent is null
                                 CustomFolder folda = new CustomFolder(fpath, new(), doCount, order);
+                                //but add the folder to the top level list
+                                folda.TopLevelFoldersList = topLevelFolders;
                                 if (!reader.IsEmptyElement)
                                 {
                                     folda.Children = LoadChildFolders(reader, folda);

@@ -14,7 +14,14 @@ namespace FileCounter
         public List<CustomFolder> Children = new();
         public int Order { get; set; }
 
+        /// <summary>
+        /// Parent folder of this folder if it exists
+        /// </summary>
         public CustomFolder? ParentFolder { get; set; }
+        /// <summary>
+        /// If this folder is a top level folder this is where the list of all will go
+        /// </summary>
+        public List<CustomFolder>? TopLevelFoldersList { get; set;}
 
         public int Count
         {
