@@ -20,7 +20,7 @@ namespace FileCounter
         {
             get
             {
-                int count = Directory.GetFiles(Path).Count();
+                int count = Directory.GetFiles(Path).Length;
                 foreach (var child in Children) count += child.Count;
                 return count;
             }
