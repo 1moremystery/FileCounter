@@ -153,10 +153,23 @@ namespace FileCounter
             {
                 anythingNew.Add(path);
                 CustomFolder newFolder = new(path, folder);
-                foreach (CustomFolder f in newFolder.Children) anythingNew.Add(f.Path);
                 folder.Children.Add(newFolder);
+
+                //gets any children of this new folder and adds to list
+                List<CustomFolder> cF = new();
+                RecursiveAddChildrenOfFolderToList(newFolder, cF);
+                anythingNew.AddRange(cF.Select(f => f.Path));
             }
             return;
+        }
+
+        public static void RecursiveAddChildrenOfFolderToList(CustomFolder folder, List<CustomFolder> list)
+        {
+            foreach(CustomFolder child in folder.Children)
+            {
+                list.Add(child);
+                RecursiveAddChildrenOfFolderToList(child, list);
+            }
         }
     }
 }
