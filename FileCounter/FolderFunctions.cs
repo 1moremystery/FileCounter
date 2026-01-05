@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -115,5 +116,47 @@ namespace FileCounter
             }
         }
 
+        public static void CheckForNewChildren_click(object sender, RoutedEventArgs args)
+        {
+            if (sender is MenuItem menuitem && menuitem.DataContext is CustomFolder folder)
+            {
+                List<string> newshit = new();
+                CheckNewChildren(folder,newshit);
+                if(newshit.Count > 0)
+                {
+                    folder.NumberChildren(true);
+                    StringBuilder sb = new("Found new Folders:\n");
+                    foreach(string s in newshit) sb.AppendLine(s);
+                    MessageBox.Show(sb.ToString());
+                    //TODO: print new folder paths to file
+                    RedrawTreeEvent?.Invoke(null, false);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Checks the given folder for new children
+        /// </summary>
+        /// <param name="folder">Folder to check</param>
+        /// <param name="anythingNew">Where new folder children are found</param>
+        private static void CheckNewChildren(CustomFolder folder, List<string> anythingNew)
+        {
+            List<string> existingChildren = new();
+            foreach (CustomFolder f in folder.Children)
+            {
+                CheckNewChildren(f, anythingNew);
+                existingChildren.Add(f.Path);
+            }
+            IEnumerable<string> newPaths = Directory.GetDirectories(folder.Path).Where(np => !existingChildren.Contains(np));
+            
+            foreach(string path in newPaths)
+            {
+                anythingNew.Add(path);
+                CustomFolder newFolder = new(path, folder);
+                foreach (CustomFolder f in newFolder.Children) anythingNew.Add(f.Path);
+                folder.Children.Add(newFolder);
+            }
+            return;
+        }
     }
 }

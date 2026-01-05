@@ -30,12 +30,16 @@ namespace FileCounter
             MenuItem UnCheckChildren = new() { Header = "Uncheck All Children" };
             UnCheckChildren.Click += FolderFunctions.UncheckAllChildren;
 
+            MenuItem CheckForNewChilren = new() { Header = "Check for new children" };
+            CheckForNewChilren.Click += FolderFunctions.CheckForNewChildren_click;
+
             contextMenu.Items.Add(new MenuItem() { Header = "Reset Children Order" });
             contextMenu.Items.Add(moveUp);
             contextMenu.Items.Add(moveDown);
             contextMenu.Items.Add(new Separator());
             contextMenu.Items.Add(CheckChildren);
             contextMenu.Items.Add(UnCheckChildren);
+            contextMenu.Items.Add(CheckForNewChilren);
         }
         /// <summary>
         /// Loads folders and then adds to the tree
