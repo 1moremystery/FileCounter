@@ -48,7 +48,7 @@ namespace FileCounter
         /// <summary>
         /// When a move up button is clicked
         /// </summary>
-        public static void MoveUp(object sender, RoutedEventArgs args)
+        public static void MoveUp_Click(object sender, RoutedEventArgs args)
         {
             if (sender is MenuItem menuItem && menuItem.DataContext is CustomFolder folder)
             {
@@ -70,7 +70,7 @@ namespace FileCounter
             }
         }
 
-        public static void MoveDown(object sender, RoutedEventArgs args)
+        public static void MoveDown_Click(object sender, RoutedEventArgs args)
         {
             if (sender is MenuItem menuItem && menuItem.DataContext is CustomFolder folder)
             {
@@ -94,7 +94,7 @@ namespace FileCounter
             }
         }
 
-        public static void CheckAllChildren(object sender, RoutedEventArgs args)
+        public static void CheckAllChildren_Click(object sender, RoutedEventArgs args)
         {
             if (sender is MenuItem menuItem && menuItem.DataContext is CustomFolder folder)
             {
@@ -105,7 +105,7 @@ namespace FileCounter
             }
         }
 
-        public static void UncheckAllChildren(object sender, RoutedEventArgs args)
+        public static void UncheckAllChildren_Click(object sender, RoutedEventArgs args)
         {
             if (sender is MenuItem menuItem && menuItem.DataContext is CustomFolder folder)
             {
@@ -113,6 +113,15 @@ namespace FileCounter
                 {
                     child.DoCount = false;
                 }
+            }
+        }
+
+        public static void ResetChildrenOrder_Click(object sender, RoutedEventArgs args)
+        {
+            if (sender is MenuItem menuItem && menuItem.DataContext is CustomFolder folder)
+            {
+                folder.ResetChildrenOrder();
+                RedrawTreeEvent?.Invoke(null, false);
             }
         }
 

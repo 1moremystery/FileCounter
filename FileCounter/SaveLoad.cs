@@ -19,21 +19,24 @@ namespace FileCounter
         static SaveLoad()
         {
             //Context menu
+            MenuItem resetChildrenOrder = new() { Header= "Reset Children Order"};
+            resetChildrenOrder.Click += FolderFunctions.ResetChildrenOrder_Click;
+
             MenuItem moveUp = new MenuItem() { Header = "Move Up" };
-            moveUp.Click += FolderFunctions.MoveUp;
+            moveUp.Click += FolderFunctions.MoveUp_Click;
             MenuItem moveDown = new MenuItem() { Header = "Move Down" };
-            moveDown.Click += FolderFunctions.MoveDown;
+            moveDown.Click += FolderFunctions.MoveDown_Click;
 
             MenuItem CheckChildren = new() { Header = "Check All Children" };
-            CheckChildren.Click += FolderFunctions.CheckAllChildren;
+            CheckChildren.Click += FolderFunctions.CheckAllChildren_Click;
             
             MenuItem UnCheckChildren = new() { Header = "Uncheck All Children" };
-            UnCheckChildren.Click += FolderFunctions.UncheckAllChildren;
+            UnCheckChildren.Click += FolderFunctions.UncheckAllChildren_Click;
 
             MenuItem CheckForNewChilren = new() { Header = "Check for new children" };
             CheckForNewChilren.Click += FolderFunctions.CheckForNewChildren_click;
 
-            contextMenu.Items.Add(new MenuItem() { Header = "Reset Children Order" });
+            contextMenu.Items.Add(resetChildrenOrder);
             contextMenu.Items.Add(moveUp);
             contextMenu.Items.Add(moveDown);
             contextMenu.Items.Add(new Separator());

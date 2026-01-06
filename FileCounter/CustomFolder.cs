@@ -51,6 +51,11 @@ namespace FileCounter
             }
         }
 
+        /// <summary>
+        /// Constructs a new custom folder and creates children
+        /// </summary>
+        /// <param name="path">path of new folder</param>
+        /// <param name="parentFolder">parent folder</param>
         public CustomFolder(string path, CustomFolder? parentFolder = null)
         {
             Path = path;
@@ -82,6 +87,18 @@ namespace FileCounter
             }
         }
 
+        /// <summary>
+        /// Reset children order
+        /// </summary>
+        public void ResetChildrenOrder()
+        {
+            Children = new(Children.OrderBy(x => x.Path));
+            NumberChildren();
+        }
+
+        /// <summary>
+        /// Called on setup, creates new children
+        /// </summary>
         void SetupChildren()
         {
             foreach (string s in Directory.GetDirectories(Path))
