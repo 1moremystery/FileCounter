@@ -15,26 +15,26 @@ namespace FileCounter
 {
     public static class SaveLoad
     {
-        static ContextMenu globalContextMenu = new();
+        private static readonly ContextMenu globalContextMenu = new();
         static SaveLoad()
         {
             //Context menu
-            MenuItem resetChildrenOrder = new() { Header= "Reset Children Order"};
+            MenuItem resetChildrenOrder = new() { Header = "Reset Children Order" };
             resetChildrenOrder.Click += FolderFunctions.ResetChildrenOrder_Click;
 
-            MenuItem moveUp = new MenuItem() { Header = "Move Up" };
+            MenuItem moveUp = new() { Header = "Move Up" };
             moveUp.Click += FolderFunctions.MoveUp_Click;
-            MenuItem moveDown = new MenuItem() { Header = "Move Down" };
+            MenuItem moveDown = new() { Header = "Move Down" };
             moveDown.Click += FolderFunctions.MoveDown_Click;
 
             MenuItem CheckChildren = new() { Header = "Check All Children" };
             CheckChildren.Click += FolderFunctions.CheckAllChildren_Click;
-            
+
             MenuItem UnCheckChildren = new() { Header = "Uncheck All Children" };
             UnCheckChildren.Click += FolderFunctions.UncheckAllChildren_Click;
 
-            MenuItem CheckForNewChilren = new() { Header = "Check for new children" };
-            CheckForNewChilren.Click += FolderFunctions.CheckForNewChildren_click;
+            MenuItem CheckForNewChildren = new() { Header = "Check for new children" };
+            CheckForNewChildren.Click += FolderFunctions.CheckForNewChildren_click;
 
             globalContextMenu.Items.Add(resetChildrenOrder);
             globalContextMenu.Items.Add(moveUp);
@@ -42,7 +42,7 @@ namespace FileCounter
             globalContextMenu.Items.Add(new Separator());
             globalContextMenu.Items.Add(CheckChildren);
             globalContextMenu.Items.Add(UnCheckChildren);
-            globalContextMenu.Items.Add(CheckForNewChilren);
+            globalContextMenu.Items.Add(CheckForNewChildren);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace FileCounter
         }
 
         /// <summary>
-        /// Loads customfolders from given folder path
+        /// Loads customFolders from given folder path
         /// </summary>
         /// <param name="path">Path to start on</param>
         /// <returns>List of top level folders</returns>
@@ -89,7 +89,7 @@ namespace FileCounter
 
                 //recursive call
                 AddChildrenToTree(childFolder, treeView);
-                
+
                 tvi.Items.Add(treeView);
             }
         }
@@ -222,7 +222,7 @@ namespace FileCounter
         /// <returns>List of folders</returns>
         public static List<CustomFolder> LoadFromFile(string path)
         {
-            List<CustomFolder> topLevelFolders = new List<CustomFolder>();
+            List<CustomFolder> topLevelFolders = new();
             using (XmlReader reader = XmlReader.Create(path))
             {
                 while (reader.Read())
@@ -243,7 +243,7 @@ namespace FileCounter
                             try
                             {
                                 //toplevel folder so parent is null
-                                CustomFolder folda = new CustomFolder(fpath, new(), doCount, order);
+                                CustomFolder folda = new(fpath, new(), doCount, order);
                                 //but add the folder to the top level list
                                 folda.TopLevelFoldersList = topLevelFolders;
                                 if (!reader.IsEmptyElement)

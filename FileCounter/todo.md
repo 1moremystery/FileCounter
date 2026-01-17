@@ -3,9 +3,9 @@
 - [x] Open outputs
 	- [x] Open raw
 	- [x] Open named
-- [ ] Custom sorting
-	- [ ] context menu
-		- [ ] right click to reset children order
+- [x] Custom sorting
+	- [x] context menu
+		- [x] right click to reset children order
 		- [x] move up
 		- [x] move down
 		- [x] Check/uncheck children
