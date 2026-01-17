@@ -45,6 +45,19 @@ namespace FileCounter
             globalContextMenu.Items.Add(CheckForNewChilren);
         }
 
+        /// <summary>
+        /// Creates a new treeViewItem with context menu and dataContext
+        /// </summary>
+        /// <param name="folder">folder to be dataContext</param>
+        /// <returns>TreeView item</returns>
+        private static TreeViewItem CreateNewTreeViewItem(CustomFolder folder)
+        {
+            TreeViewItem treeView = new();
+            treeView.DataContext = folder;
+            treeView.ContextMenu = globalContextMenu;
+            treeView.Header = new FolderControl();
+            return treeView;
+        }
 
         /// <summary>
         /// Loads customfolders from given folder path
@@ -71,15 +84,12 @@ namespace FileCounter
         {
             foreach (CustomFolder childFolder in customFolder.Children)
             {
-                TreeViewItem treeview = new();
-                treeview.DataContext = childFolder;
-                treeview.ContextMenu = globalContextMenu;
-                treeview.Header = new FolderControl();
+                TreeViewItem treeView = CreateNewTreeViewItem(childFolder);
 
                 //recursive call
-                AddChildrenToTree(childFolder, treeview);
+                AddChildrenToTree(childFolder, treeView);
                 
-                tvi.Items.Add(treeview);
+                tvi.Items.Add(treeView);
             }
         }
 
@@ -197,14 +207,7 @@ namespace FileCounter
             tree.Items.Clear();
             foreach (CustomFolder customFolder in folders)
             {
-                TreeViewItem treeItem = new();
-                treeItem.DataContext = customFolder;
-                treeItem.Header = new FolderControl();
-
-
-                treeItem.ContextMenu = globalContextMenu;
-
-
+                TreeViewItem treeItem = CreateNewTreeViewItem(customFolder);
 
                 AddChildrenToTree(customFolder, treeItem);
                 tree.Items.Add(treeItem);
