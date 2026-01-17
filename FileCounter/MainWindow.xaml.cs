@@ -110,7 +110,8 @@ namespace FileCounter
             OpenFolderDialog dialog = new();
             if (dialog.ShowDialog().GetValueOrDefault())
             {
-                topLevelFolders = SaveLoad.LoadFolder(dialog.FolderName, FolderTree);
+                topLevelFolders = SaveLoad.LoadFolder(dialog.FolderName);
+                SaveLoad.SetupTree(topLevelFolders,FolderTree);
                 NumberTopFolders();
             }
         }
