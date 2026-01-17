@@ -52,7 +52,7 @@ namespace FileCounter
         {
             if (sender is MenuItem menuItem && menuItem.DataContext is CustomFolder folder)
             {
-                if(folder.ParentFolder != null)
+                if(folder.ParentFolder != null) //this is a child folder
                 {
                     int index = folder.ParentFolder.Children.IndexOf(folder);
                     folder.ParentFolder.Children.Remove(folder);
@@ -60,7 +60,7 @@ namespace FileCounter
                     folder.ParentFolder.NumberChildren();
                     RedrawTreeEvent?.Invoke(folder, false);
                 }
-                else if(folder.TopLevelFoldersList != null)
+                else if(folder.TopLevelFoldersList != null) //this is a topLevel folder
                 {
                     int index = folder.TopLevelFoldersList.IndexOf(folder);
                     folder.TopLevelFoldersList.Remove(folder);

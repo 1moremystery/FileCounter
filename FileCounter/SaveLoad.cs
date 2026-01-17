@@ -66,13 +66,14 @@ namespace FileCounter
         /// <returns>List of top level folders</returns>
         public static List<CustomFolder> LoadFolder(string path)
         {
-            List<CustomFolder> result = new();
+            List<CustomFolder> topLevelFoldersList = new();
             foreach (string fPath in Directory.GetDirectories(path))
             {
                 CustomFolder customFolder = new(fPath);
-                result.Add(customFolder);
+                customFolder.TopLevelFoldersList = topLevelFoldersList;
+                topLevelFoldersList.Add(customFolder);
             }
-            return result;
+            return topLevelFoldersList;
         }
 
         /// <summary>
