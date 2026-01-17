@@ -60,6 +60,7 @@ namespace FileCounter
                 result.Add(customFolder);
                 TreeViewItem tvi = new();
                 tvi.DataContext = customFolder;
+                tvi.ContextMenu = contextMenu;
 
                 CheckBox box = new();
                 box.Content = customFolder.Path;

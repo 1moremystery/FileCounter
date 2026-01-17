@@ -15,3 +15,4 @@
 	- [ ] Function to go through top folders and see if the path of new folder contains the top path
 - [x] add way to see what order each folder is
 - [ ] "move up" broke
+- [x] Bug where context menu isnt added to top level folders
