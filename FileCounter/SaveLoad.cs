@@ -15,59 +15,65 @@ namespace FileCounter
 {
     public static class SaveLoad
     {
-        static ContextMenu contextMenu = new();
+        private static readonly ContextMenu globalContextMenu = new();
         static SaveLoad()
         {
             //Context menu
-            MenuItem moveUp = new MenuItem() { Header = "Move Up" };
-            moveUp.Click += FolderFunctions.MoveUp;
-            MenuItem moveDown = new MenuItem() { Header = "Move Down" };
-            moveDown.Click += FolderFunctions.MoveDown;
+            MenuItem resetChildrenOrder = new() { Header = "Reset Children Order" };
+            resetChildrenOrder.Click += FolderFunctions.ResetChildrenOrder_Click;
+
+            MenuItem moveUp = new() { Header = "Move Up" };
+            moveUp.Click += FolderFunctions.MoveUp_Click;
+            MenuItem moveDown = new() { Header = "Move Down" };
+            moveDown.Click += FolderFunctions.MoveDown_Click;
 
             MenuItem CheckChildren = new() { Header = "Check All Children" };
-            CheckChildren.Click += FolderFunctions.CheckAllChildren;
-            
-            MenuItem UnCheckChildren = new() { Header = "Uncheck All Children" };
-            UnCheckChildren.Click += FolderFunctions.UncheckAllChildren;
+            CheckChildren.Click += FolderFunctions.CheckAllChildren_Click;
 
-            contextMenu.Items.Add(new MenuItem() { Header = "Reset Children Order" });
-            contextMenu.Items.Add(moveUp);
-            contextMenu.Items.Add(moveDown);
-            contextMenu.Items.Add(new Separator());
-            contextMenu.Items.Add(CheckChildren);
-            contextMenu.Items.Add(UnCheckChildren);
+            MenuItem UnCheckChildren = new() { Header = "Uncheck All Children" };
+            UnCheckChildren.Click += FolderFunctions.UncheckAllChildren_Click;
+
+            MenuItem CheckForNewChildren = new() { Header = "Check for new children" };
+            CheckForNewChildren.Click += FolderFunctions.CheckForNewChildren_click;
+
+            globalContextMenu.Items.Add(resetChildrenOrder);
+            globalContextMenu.Items.Add(moveUp);
+            globalContextMenu.Items.Add(moveDown);
+            globalContextMenu.Items.Add(new Separator());
+            globalContextMenu.Items.Add(CheckChildren);
+            globalContextMenu.Items.Add(UnCheckChildren);
+            globalContextMenu.Items.Add(CheckForNewChildren);
         }
+
         /// <summary>
-        /// Loads folders and then adds to the tree
+        /// Creates a new treeViewItem with context menu and dataContext
+        /// </summary>
+        /// <param name="folder">folder to be dataContext</param>
+        /// <returns>TreeView item</returns>
+        private static TreeViewItem CreateNewTreeViewItem(CustomFolder folder)
+        {
+            TreeViewItem treeView = new();
+            treeView.DataContext = folder;
+            treeView.ContextMenu = globalContextMenu;
+            treeView.Header = new FolderControl();
+            return treeView;
+        }
+
+        /// <summary>
+        /// Loads customFolders from given folder path
         /// </summary>
         /// <param name="path">Path to start on</param>
-        /// <param name="tree">Tree to add onto</param>
         /// <returns>List of top level folders</returns>
-        public static List<CustomFolder> LoadFolder(string path, TreeView tree)
+        public static List<CustomFolder> LoadFolder(string path)
         {
-            tree.Items.Clear();
-            List<CustomFolder> result = new();
+            List<CustomFolder> topLevelFoldersList = new();
             foreach (string fPath in Directory.GetDirectories(path))
             {
                 CustomFolder customFolder = new(fPath);
-                result.Add(customFolder);
-                TreeViewItem tvi = new();
-                tvi.DataContext = customFolder;
-
-                CheckBox box = new();
-                box.Content = customFolder.Path;
-                tvi.Header = box;
-
-                //binding
-                Binding binding = new(nameof(customFolder.DoCount));
-                binding.Mode = BindingMode.TwoWay;
-                BindingOperations.SetBinding(box, CheckBox.IsCheckedProperty, binding);
-
-
-                AddChildrenToTree(customFolder, tvi);
-                tree.Items.Add(tvi);
+                customFolder.TopLevelFoldersList = topLevelFoldersList;
+                topLevelFoldersList.Add(customFolder);
             }
-            return result;
+            return topLevelFoldersList;
         }
 
         /// <summary>
@@ -77,21 +83,14 @@ namespace FileCounter
         /// <param name="tvi">Tree item to add children too</param>
         private static void AddChildrenToTree(CustomFolder customFolder, TreeViewItem tvi)
         {
-            foreach (CustomFolder item in customFolder.Children)
+            foreach (CustomFolder childFolder in customFolder.Children)
             {
-                TreeViewItem treeview = new();
-                treeview.DataContext = item;
-                treeview.ContextMenu = contextMenu;
-                CheckBox box = new();
-                box.Content = item.ToString();
-                //binding
-                Binding binding = new(nameof(item.DoCount));
-                binding.Mode = BindingMode.TwoWay;
-                BindingOperations.SetBinding(box, CheckBox.IsCheckedProperty, binding);
+                TreeViewItem treeView = CreateNewTreeViewItem(childFolder);
 
-                treeview.Header = box;
-                AddChildrenToTree(item, treeview);
-                tvi.Items.Add(treeview);
+                //recursive call
+                AddChildrenToTree(childFolder, treeView);
+
+                tvi.Items.Add(treeView);
             }
         }
 
@@ -206,24 +205,10 @@ namespace FileCounter
         /// <param name="tree">TreeView to add to</param>
         public static void SetupTree(IEnumerable<CustomFolder> folders, TreeView tree)
         {
-            
-
-            //setup tree
             tree.Items.Clear();
             foreach (CustomFolder customFolder in folders)
             {
-                TreeViewItem treeItem = new();
-                treeItem.DataContext = customFolder;
-
-                CheckBox checkBox = new();
-                checkBox.Content = customFolder.ToString();
-                treeItem.Header = checkBox;
-                treeItem.ContextMenu = contextMenu;
-                //binding
-                Binding binding = new(nameof(customFolder.DoCount));
-                binding.Mode = BindingMode.TwoWay;
-                BindingOperations.SetBinding(checkBox, CheckBox.IsCheckedProperty, binding);
-
+                TreeViewItem treeItem = CreateNewTreeViewItem(customFolder);
 
                 AddChildrenToTree(customFolder, treeItem);
                 tree.Items.Add(treeItem);
@@ -237,7 +222,7 @@ namespace FileCounter
         /// <returns>List of folders</returns>
         public static List<CustomFolder> LoadFromFile(string path)
         {
-            List<CustomFolder> topLevelFolders = new List<CustomFolder>();
+            List<CustomFolder> topLevelFolders = new();
             using (XmlReader reader = XmlReader.Create(path))
             {
                 while (reader.Read())
@@ -258,7 +243,7 @@ namespace FileCounter
                             try
                             {
                                 //toplevel folder so parent is null
-                                CustomFolder folda = new CustomFolder(fpath, new(), doCount, order);
+                                CustomFolder folda = new(fpath, new(), doCount, order);
                                 //but add the folder to the top level list
                                 folda.TopLevelFoldersList = topLevelFolders;
                                 if (!reader.IsEmptyElement)

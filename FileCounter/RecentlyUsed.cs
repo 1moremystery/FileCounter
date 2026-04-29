@@ -20,13 +20,13 @@ namespace FileCounter
         public static string GetRecents(out List<string> recentFiles)
         {
             recentFiles = new();
-            if(!File.Exists("recent.xml")) return "";
+            if (!File.Exists("recent.xml")) return "";
 
             using (XmlReader reader = XmlReader.Create("recent.xml"))
             {
                 while (reader.Read())
                 {
-                    if(reader.IsStartElement() && reader.Name == "file")
+                    if (reader.IsStartElement() && reader.Name == "file")
                     {
                         recentFiles.Add(reader.ReadString());
                     }
@@ -38,7 +38,7 @@ namespace FileCounter
 
         public static void WriteRecent(IEnumerable<string> recentFiles)
         {
-            using(XmlWriter writer = XmlWriter.Create("recent.xml", new() { Indent = true }))
+            using (XmlWriter writer = XmlWriter.Create("recent.xml", new() { Indent = true }))
             {
                 writer.WriteStartDocument();
                 writer.WriteStartElement("root");
@@ -57,7 +57,7 @@ namespace FileCounter
         {
             if (recentFiles.Remove(nPath))
             {
-                recentFiles.Insert(0,nPath);
+                recentFiles.Insert(0, nPath);
             }
             else
             {

@@ -19,13 +19,13 @@ namespace FileCounter
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<CustomFolder> topLevelFolders = new();
-        List<string> recentFiles;
+        private List<CustomFolder> topLevelFolders = new();
+        private readonly List<string> recentFiles;
 
         public MainWindow()
         {
             InitializeComponent();
-            string mostRecent = RecentlyUsed.GetRecents(out  recentFiles);
+            string mostRecent = RecentlyUsed.GetRecents(out recentFiles);
             if (!string.IsNullOrEmpty(mostRecent))
             {
                 topLevelFolders = SaveLoad.LoadFromFile(mostRecent);
@@ -53,7 +53,7 @@ namespace FileCounter
         public void RecentToMenuItem(List<string> recentFiles)
         {
             RecentFilesMenuItem.Items.Clear();
-            if(recentFiles.Count > 0 )
+            if (recentFiles.Count > 0)
             {
                 RecentFilesMenuItem.IsEnabled = true;
                 MenuItem remove = new();
@@ -63,7 +63,7 @@ namespace FileCounter
             }
             foreach (string file in recentFiles)
             {
-                MenuItem menuItem = new MenuItem();
+                MenuItem menuItem = new();
                 menuItem.Header = file;
                 menuItem.Click += RecentFile_Click;
                 RecentFilesMenuItem.Items.Add(menuItem);
@@ -77,11 +77,11 @@ namespace FileCounter
         /// <param name="e"></param>
         private void RecentFile_Click(object sender, RoutedEventArgs e)
         {
-            if(sender is MenuItem menuItem && menuItem.Header is string s)
-            { 
+            if (sender is MenuItem menuItem && menuItem.Header is string s)
+            {
                 topLevelFolders = SaveLoad.LoadFromFile(s);
                 SaveLoad.SetupTree(topLevelFolders, FolderTree);
-                RecentlyUsed.AddToRecent(recentFiles,s);
+                RecentlyUsed.AddToRecent(recentFiles, s);
                 RecentToMenuItem(recentFiles);
             }
         }
@@ -110,7 +110,8 @@ namespace FileCounter
             OpenFolderDialog dialog = new();
             if (dialog.ShowDialog().GetValueOrDefault())
             {
-                topLevelFolders = SaveLoad.LoadFolder(dialog.FolderName, FolderTree);
+                topLevelFolders = SaveLoad.LoadFolder(dialog.FolderName);
+                SaveLoad.SetupTree(topLevelFolders, FolderTree);
                 NumberTopFolders();
             }
         }
@@ -164,8 +165,8 @@ namespace FileCounter
                 topLevelFolders = SaveLoad.LoadFromFile(dialog.FileName);
                 topLevelFolders.Sort();
                 FolderTree.Items.Clear();
-                SaveLoad.SetupTree(topLevelFolders,FolderTree);
-                RecentlyUsed.AddToRecent(recentFiles,dialog.FileName);
+                SaveLoad.SetupTree(topLevelFolders, FolderTree);
+                RecentlyUsed.AddToRecent(recentFiles, dialog.FileName);
                 RecentToMenuItem(recentFiles);
             }
         }
@@ -191,7 +192,7 @@ namespace FileCounter
                 SaveLoad.DoOutput(topLevelFolders);
             }
             string path = System.IO.Path.GetFullPath("outputRaw.txt");
-            Process.Start("explorer",path);
+            Process.Start("explorer", path);
         }
 
         /// <summary>
@@ -209,7 +210,7 @@ namespace FileCounter
 
         private void ResetAllOrder_Click(object sender, RoutedEventArgs e)
         {
-            if(topLevelFolders.Count <= 0)
+            if (topLevelFolders.Count <= 0)
             {
                 MessageBox.Show("Add folders");
                 return;

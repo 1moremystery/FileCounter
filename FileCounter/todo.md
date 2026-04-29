@@ -3,9 +3,9 @@
 - [x] Open outputs
 	- [x] Open raw
 	- [x] Open named
-- [ ] Custom sorting
-	- [ ] context menu
-		- [ ] right click to reset children order
+- [x] Custom sorting
+	- [x] context menu
+		- [x] right click to reset children order
 		- [x] move up
 		- [x] move down
 		- [x] Check/uncheck children
@@ -14,3 +14,5 @@
 - [ ] Add individual folders
 	- [ ] Function to go through top folders and see if the path of new folder contains the top path
 - [x] add way to see what order each folder is
+- [x] "move up" broke
+- [x] Bug where context menu isnt added to top level folders
